@@ -10,10 +10,10 @@ spring:
     show-sql: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: localhost
-    username: root
-    password: 1234
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
 jwt:
   token:
-    secret: hello
+    secret: ${JWT_TOKEN_SECRET}
