@@ -15,4 +15,9 @@ public class TestController {
     public String test(){
         return "CICD Test 성공입니다";
     }
+
+    @GetMapping("/test2")
+    public String test2(){
+        return "CICD Test Success";
+    }
 }
