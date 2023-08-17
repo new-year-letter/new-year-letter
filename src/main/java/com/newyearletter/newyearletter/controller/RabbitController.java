@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/rabbit")
+@RequestMapping("/rabbit")
 @RequiredArgsConstructor
 public class RabbitController {
     private final RabbitService rabbitService;
