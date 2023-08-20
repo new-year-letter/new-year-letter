@@ -30,14 +30,14 @@ public class SecurityConfig {
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
                 .authorizeRequests() //사용권장
+                .antMatchers(HttpMethod.OPTIONS,"/**/*").permitAll() //cors preflight 허용
                 // 경로지정 맵핑
-                .antMatchers("/api/users/join", "/api/users/login").permitAll() // join, login은 언제나 가능
-                .antMatchers(HttpMethod.GET,"/api/rabbit/mypage/**").authenticated()
-                .antMatchers(HttpMethod.GET,"/api/letter/**/getLetter").authenticated()
-                .antMatchers(HttpMethod.GET,"/api/letter/**/getLetter/**").authenticated()
-                .antMatchers(HttpMethod.POST,"/api/letter/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/api/**").authenticated()
+                .antMatchers("/users/join", "/users/login", "/api/test").permitAll() // join, login은 언제나 가능
+                .antMatchers(HttpMethod.GET,"/rabbit/mypage/**").authenticated()
+                .antMatchers(HttpMethod.GET,"/letter/**/getLetter").authenticated()
+                .antMatchers(HttpMethod.GET,"/letter/**/getLetter/**").authenticated()
+                .antMatchers(HttpMethod.POST,"/letter/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/**").authenticated()
                 .and()
                 .sessionManagement()// 세션관리구성
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 씀, 스프링 시큐리티는 HttpSession을 생성하지 않고, SecurityContext를 얻기 위해 사용하지 않는다
