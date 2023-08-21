@@ -17,6 +17,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 //@EnableWebSecurity
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic().disable() //HTTP 기본 인증 구성
                 .csrf().disable()//csrf보호 활성화, 비활성화(disable) 가능
-                .cors().and()//CorsFilter를 사용한다.
+                .cors(withDefaults())//CorsFilter를 사용한다.
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
