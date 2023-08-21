@@ -35,9 +35,9 @@ public class SecurityConfig {
                 .httpBasic().disable() //HTTP 기본 인증 구성
                 .csrf().disable()//csrf보호 활성화, 비활성화(disable) 가능
                 .cors().disable() //CorsFilter를 사용한다.
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .and()
                 .authorizeRequests() //사용권장
                 .antMatchers(HttpMethod.OPTIONS,"/**/*").permitAll() //cors preflight 허용
                 // 경로지정 맵핑
