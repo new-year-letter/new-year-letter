@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -16,6 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -32,7 +34,14 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic().disable() //HTTP 기본 인증 구성
                 .csrf().disable()//csrf보호 활성화, 비활성화(disable) 가능
-                .cors(withDefaults())//CorsFilter를 사용한다.
+                .cors(c -> c.configurationSource(request -> {
+                    CorsConfiguration cors = new CorsConfiguration();
+                    cors.setAllowedOrigins(List.of("*"));
+                    cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+                    cors.setAllowedHeaders(List.of("*"));
+                    cors.setExposedHeaders(List.of("*"));
+                    return cors;
+                }))//CorsFilter를 사용한다.
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
