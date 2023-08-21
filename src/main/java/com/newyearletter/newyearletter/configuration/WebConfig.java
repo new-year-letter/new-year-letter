@@ -11,7 +11,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**") //해당 서버의 모든 URL 요청 허용
                 .allowedOrigins("https://www.newyearletter.com", "localhost:8484") //원하는 도메인만 허용
-                .allowedMethods("*");
+                .allowedMethods("*")
+                .allowCredentials(true);
     }
 
 }
