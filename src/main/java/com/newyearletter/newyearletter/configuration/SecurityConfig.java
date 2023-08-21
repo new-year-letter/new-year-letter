@@ -34,7 +34,7 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic().disable() //HTTP 기본 인증 구성
                 .csrf().disable()//csrf보호 활성화, 비활성화(disable) 가능
-                .cors().disable() //CorsFilter를 사용한다.
+                .cors().and() //CorsFilter를 사용한다.
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
@@ -54,18 +54,4 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtTokenFilter( userService, secretKey), UsernamePasswordAuthenticationFilter.class) //UserNamePasswordAuthenticationFilter적용하기 전에 JWTTokenFilter를 적용 하라는 뜻 입니다.
                 .build();
     }
-
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-//        configuration.setAllowedMethods(Arrays.asList("HEAD","POST","GET","DELETE","PUT"));
-//        configuration.setAllowedHeaders(Arrays.asList("*"));
-//        configuration.setAllowCredentials(true);
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
 }
