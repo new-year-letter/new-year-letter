@@ -34,14 +34,7 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic().disable() //HTTP 기본 인증 구성
                 .csrf().disable()//csrf보호 활성화, 비활성화(disable) 가능
-                .cors(c -> c.configurationSource(request -> {
-                    CorsConfiguration cors = new CorsConfiguration();
-                    cors.setAllowedOrigins(List.of("*"));
-                    cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
-                    cors.setAllowedHeaders(List.of("*"));
-                    cors.setExposedHeaders(List.of("*"));
-                    return cors;
-                }))//CorsFilter를 사용한다.
+                .cors().disable() //CorsFilter를 사용한다.
                 .exceptionHandling()
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
