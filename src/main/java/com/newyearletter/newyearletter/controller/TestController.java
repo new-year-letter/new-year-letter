@@ -10,6 +10,6 @@ public class TestController {
 
     @GetMapping
     public String Test(){
-        return "Test";
+        return "CICD TEST";
     }
 }
