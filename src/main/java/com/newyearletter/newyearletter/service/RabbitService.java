@@ -18,33 +18,6 @@ import java.time.LocalDateTime;
 public class RabbitService {
     private final UserRepository userRepository;
 
-    /**
-     * 마이페이지 조회
-     */
-    public RabbitMyPageResponse mypage(String uuid, String userId) {
-        //url이 유무 확인
-        User user = userRepository.findByUuid(uuid)
-                .orElseThrow(() -> new AppException(ErrorCode.URL_NOT_FOUND, "해당 URL을 찾을 수 없습니다."));
-
-        //로그인한 유저와 url사용자의 유저가 일치하는지 확인
-        if(!user.getUserID().equals(userId)){
-            throw new AppException(ErrorCode.INVALID_PERMISSION, "접속 권한이 없습니다.");
-        }
-        LocalDateTime currentDateTime = LocalDateTime.now();
-
-        return new RabbitMyPageResponse(user.getNickName(), user.getMoney(), user.getCustom(), user.getWish(), currentDateTime);
-    }
-
-    /**
-     * 친구 페이지 조회
-     */
-    public RabbitResponse friendPage(String uuid) {
-        //url이 유무 확인
-        User user = userRepository.findByUuid(uuid)
-                .orElseThrow(() -> new AppException(ErrorCode.URL_NOT_FOUND, "해당 URL을 찾을 수 없습니다."));
-
-        return new RabbitResponse(user.getNickName(), user.getWish(), user.getMoney(), user.getCustom());
-    }
 
     /**
      * 커스텀 페이지 조회
