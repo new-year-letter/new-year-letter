@@ -13,6 +13,7 @@ public class RabbitMyPageResponse {
     private Integer money;
     private String custom;
     private String wish;
+    private String uuid;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd' 'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime currentDateTime;
 }

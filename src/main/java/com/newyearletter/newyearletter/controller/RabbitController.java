@@ -19,22 +19,6 @@ public class RabbitController {
     private final RabbitService rabbitService;
 
     /**
-     * 마이페이지 조회
-     */
-    @GetMapping("/mypage/{uuid}")
-    public Response<RabbitMyPageResponse> myPage(@PathVariable String uuid, Authentication authentication){
-
-        String userID = null;
-        try {
-            userID = authentication.getName();
-        } catch (Exception e) {
-            throw new AppException(ErrorCode.INVALID_TOKEN, ErrorCode.INVALID_TOKEN.getMessage());
-        }
-        RabbitMyPageResponse mypageResponse = rabbitService.mypage(uuid, userID);
-        return Response.success(mypageResponse);
-    }
-
-    /**
      * 커스텀 페이지 조회
      */
     @GetMapping("/mypage/{uuid}/custom")
@@ -54,12 +38,5 @@ public class RabbitController {
         return Response.success(customResponse);
     }
 
-    /**
-     * 친구 페이지 조회
-     */
-    @GetMapping("/{uuid}")
-    public Response<RabbitResponse> friendPage(@PathVariable String uuid){
-        RabbitResponse rabbitResponse = rabbitService.friendPage(uuid);
-        return Response.success(rabbitResponse);
-    }
+
 }
