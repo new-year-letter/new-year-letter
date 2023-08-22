@@ -41,8 +41,8 @@ public class SecurityConfig {
                 .authorizeRequests() //사용권장
                 .antMatchers(HttpMethod.OPTIONS,"/**/*").permitAll() //cors preflight 허용
                 // 경로지정 맵핑
-                .antMatchers("/users/join", "/users/login", "/api/test").permitAll() // join, login은 언제나 가능
-                .antMatchers(HttpMethod.GET,"/rabbit/mypage/**").authenticated()
+                .antMatchers("/users/join", "/auth/token/login", "/api/test", "/auth/token/logout").permitAll() // join, login은 언제나 가능
+                .antMatchers(HttpMethod.GET,"/rabbit/me/**").authenticated()
                 .antMatchers(HttpMethod.GET,"/letter/**/getLetter").authenticated()
                 .antMatchers(HttpMethod.GET,"/letter/**/getLetter/**").authenticated()
                 .antMatchers(HttpMethod.POST,"/letter/**").permitAll()

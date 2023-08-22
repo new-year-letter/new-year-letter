@@ -5,6 +5,7 @@ import com.newyearletter.newyearletter.domain.dto.user.*;
 import com.newyearletter.newyearletter.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,8 +38,8 @@ public class AuthController {
     /**
      * token 재발행
      */
-    @DeleteMapping("/access")
-    public void accessToken(@RequestBody RefreshTokenRequest request){
+    @PostMapping("/access")
+    public void accessToken(@RequestBody RefreshTokenRequest request, Authentication authentication){
         //access token logic
         // refreshToken을 받고 access Token 재발행
     }
