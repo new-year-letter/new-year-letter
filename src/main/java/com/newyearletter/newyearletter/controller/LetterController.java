@@ -24,7 +24,7 @@ public class LetterController {
     private final LetterService letterService;
 
     /**
-     * 편지 작성 페이지 조회0
+     * 편지 작성 페이지 조회
      */
     @GetMapping("/{uuid}")
     public Response<LetterPageResponse> letterPage(@PathVariable String uuid){
@@ -60,7 +60,6 @@ public class LetterController {
         String userName = authentication.getName();
         LetterGetResponse letterGetResponse = letterService.getLetter(uuid, id, userName);
         return Response.success(letterGetResponse);
-
     }
 
 

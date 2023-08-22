@@ -1,5 +1,7 @@
 package com.newyearletter.newyearletter.service;
 
+import com.newyearletter.newyearletter.domain.dto.rabbit.RabbitMyPageResponse;
+import com.newyearletter.newyearletter.domain.dto.rabbit.RabbitResponse;
 import com.newyearletter.newyearletter.domain.dto.user.UserDto;
 import com.newyearletter.newyearletter.domain.dto.user.UserJoinRequest;
 import com.newyearletter.newyearletter.domain.dto.user.UserLoginResponse;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -64,7 +67,30 @@ public class UserService {
         String token = JwtTokenUtil.createToken(userID, key, expireTimeMs);
         log.info("token: {}",token);
 
-        return new UserLoginResponse(token, user.getUuid());
+        return new UserLoginResponse("accessToken", "refreshToken");
+    }
+
+    /**
+     * 마이페이지 조회
+     */
+    public RabbitMyPageResponse mypage(String userId) {
+        //user 확인
+        User user = userRepository.findByUserID(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_FOUND,"해당 User을 찾을 수 없습니다"));
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        return new RabbitMyPageResponse(user.getNickName(), user.getMoney(), user.getCustom(), user.getWish(), user.getUuid(),currentDateTime);
+    }
+
+    /**
+     * 친구 페이지 조회
+     */
+    public RabbitResponse friendPage(String uuid) {
+        //url이 유무 확인
+        User user = userRepository.findByUuid(uuid)
+                .orElseThrow(() -> new AppException(ErrorCode.URL_NOT_FOUND, "해당 URL을 찾을 수 없습니다."));
+
+        return new RabbitResponse(user.getNickName(), user.getWish(), user.getMoney(), user.getCustom());
     }
 
     /**
