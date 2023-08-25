@@ -1,4 +1,4 @@
-package com.newyearletter.newyearletter.domain.dto.user;
+package com.newyearletter.newyearletter.domain.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

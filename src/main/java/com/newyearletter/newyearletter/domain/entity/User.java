@@ -29,7 +29,7 @@ public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UserSeq")
-    private Integer seq;
+    private Long seq;
 
     @Column(name = "userID")
     private String userID;

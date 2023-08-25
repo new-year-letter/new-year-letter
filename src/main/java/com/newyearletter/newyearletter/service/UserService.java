@@ -5,9 +5,11 @@ import com.newyearletter.newyearletter.domain.dto.rabbit.RabbitResponse;
 import com.newyearletter.newyearletter.domain.dto.user.UserDto;
 import com.newyearletter.newyearletter.domain.dto.user.UserJoinRequest;
 import com.newyearletter.newyearletter.domain.dto.user.UserLoginResponse;
+import com.newyearletter.newyearletter.domain.entity.RefreshToken;
 import com.newyearletter.newyearletter.domain.entity.User;
 import com.newyearletter.newyearletter.exception.AppException;
 import com.newyearletter.newyearletter.exception.ErrorCode;
+import com.newyearletter.newyearletter.repository.RefreshTokenRepository;
 import com.newyearletter.newyearletter.repository.UserRepository;
 import com.newyearletter.newyearletter.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,6 @@ public class UserService {
     private final BCryptPasswordEncoder encoder;
     @Value("${jwt.token.secret}")
     private String key;
-    private long expireTimeMs = 1000 * 60 * 30;
 
     /**
      * 회원가입
@@ -53,22 +54,7 @@ public class UserService {
                 .build();
     }
 
-    /**
-     * 로그인
-     */
-    public UserLoginResponse login(String userID, String password) {
-        //userID 확인
-        User user = userRepository.findByUserID(userID)
-                .orElseThrow(()-> new AppException(ErrorCode.USER_ID_NOT_FOUND, userID+"이 없습니다."));
-        //password 확인
-        if(!encoder.matches(password,user.getPassword())){
-            throw new AppException(ErrorCode.INVALID_PASSWORD,"password가 일치하지 않습니다.");
-        }
-        String token = JwtTokenUtil.createToken(userID, key, expireTimeMs);
-        log.info("token: {}",token);
 
-        return new UserLoginResponse("accessToken", "refreshToken");
-    }
 
     /**
      * 마이페이지 조회
@@ -96,8 +82,8 @@ public class UserService {
     /**
      * SpringSecurity userID확인
      */
-    public User getUserByUserID(String userID) {
-        return userRepository.findByUserID(userID)
+    public User getUserByUserSeq(Long userSeq) {
+        return userRepository.findById(userSeq)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_ID_NOT_FOUND,""));
     }
 }
