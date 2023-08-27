@@ -1,21 +1,17 @@
 package com.newyearletter.newyearletter.controller;
 
 import com.newyearletter.newyearletter.domain.dto.Response;
-import com.newyearletter.newyearletter.domain.dto.auth.AuthLogoutRequest;
 import com.newyearletter.newyearletter.domain.dto.auth.AuthLogoutResponse;
-import com.newyearletter.newyearletter.domain.dto.auth.RefreshTokenRequest;
+import com.newyearletter.newyearletter.domain.dto.auth.AuthReissueRequest;
+import com.newyearletter.newyearletter.domain.dto.auth.AuthReissueResponse;
 import com.newyearletter.newyearletter.domain.dto.user.*;
 import com.newyearletter.newyearletter.exception.AppException;
 import com.newyearletter.newyearletter.exception.ErrorCode;
 import com.newyearletter.newyearletter.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/auth/token")
@@ -40,19 +36,17 @@ public class AuthController {
      */
     @DeleteMapping()
    public Response<AuthLogoutResponse> logout(Authentication authentication){
-//        public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         //logout logic
         String userName = null;
         try{
             userName = authentication.getName();
-//            log.info("authentication.getName:{}",userName);
         } catch (Exception e){
             throw new AppException(ErrorCode.INVALID_TOKEN, ErrorCode.INVALID_TOKEN.getMessage());
         }
-//        // accessToken, refreshToken을 받고 삭제
+        // refreshToken을 받고 삭제
+        // accessToken 블랙리스트 처리
         AuthLogoutResponse response = authService.logout(userName);
         return Response.success(response);
-//        return "Success";
     }
 
 
@@ -60,9 +54,11 @@ public class AuthController {
      * token 재발행
      */
     @PostMapping("/access")
-    public void accessToken(@RequestBody RefreshTokenRequest request, Authentication authentication){
+    public Response<AuthReissueResponse> reissue(@RequestBody AuthReissueRequest request){
         //access token logic
         // refreshToken을 받고 access Token 재발행
+        AuthReissueResponse response = authService.reissue(request);
+        return Response.success(response);
     }
 
 

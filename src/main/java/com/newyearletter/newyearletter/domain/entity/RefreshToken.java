@@ -23,4 +23,18 @@ public class RefreshToken {
     private Long userSeq;
     private String refreshToken;
 
+    public RefreshToken updateToken(String newRefreshToken) {
+        return RefreshToken.builder()
+                .id(this.id)
+                .userSeq(this.userSeq)
+                .refreshToken(newRefreshToken)
+                .build();
+    }
+
+    public RefreshToken createToken(Long userSeq, String refreshToken){
+        return RefreshToken.builder()
+                .userSeq(userSeq)
+                .refreshToken(refreshToken)
+                .build();
+    }
 }

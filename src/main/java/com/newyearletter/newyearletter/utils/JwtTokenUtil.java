@@ -1,14 +1,19 @@
 package com.newyearletter.newyearletter.utils;
 
+import com.newyearletter.newyearletter.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 
 public class JwtTokenUtil {
-    private static final long ACCESS_EXPIRE_TIME = 1000 * 60 * 30;
-    private static final long REFRESH_EXPIRE_TIME = 1000 * 60 * 60 * 7;
+//    private static final long ACCESS_EXPIRE_TIME = 1000 * 60 * 30;
+//    private static final long REFRESH_EXPIRE_TIME = 1000 * 60 * 60 * 7;
+    //test
+    private static final long ACCESS_EXPIRE_TIME = 1000 * 60;
+    private static final long REFRESH_EXPIRE_TIME = 1000 * 60 * 3;
 
     private static Claims extractClaims(String token, String key) {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
@@ -27,14 +32,23 @@ public class JwtTokenUtil {
     }
 
     // 현재 시간보다 만료된 token인지 확인
-    public static boolean isExpired(String token, String secretkey) {
-        Date expiredDate = extractClaims(token, secretkey).getExpiration();
-        return expiredDate.before(new Date());
+//    public static boolean isExpired(String token, String secretkey) {
+//        Date expiredDate = extractClaims(token, secretkey).getExpiration();
+//        return expiredDate.before(new Date());
+//    }
+
+    // 유효한 token인지 확인
+    public static String isValid(String token, String key){
+        try{
+            Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+            return "OK";
+        }catch (ExpiredJwtException e){
+            return ErrorCode.EXPIRE_TOKEN.getMessage();
+        }catch (Exception e){
+            return ErrorCode.INVALID_TOKEN.getMessage();
+        }
     }
 
-    public static void updateExpired(String token, String secretkey){
-
-    }
 
     //access token
     public static String createAccessToken(String userName, Long userSeq, String key) {

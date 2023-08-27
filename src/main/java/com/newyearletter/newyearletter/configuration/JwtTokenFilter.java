@@ -59,9 +59,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             accessToken = authorizationHeader.split(" ")[1];
             log.info("accessToken:{}",accessToken);
-            //access token이 만료된 토큰일 경우
-            if(JwtTokenUtil.isExpired(accessToken, secretKey)) {
+            //access token 유효성 검사
+            if (!JwtTokenUtil.isValid(accessToken, secretKey).equals("OK")) {
+                log.info("Exception Expired Token");
                 request.setAttribute("exception", ErrorCode.INVALID_TOKEN.name());
+//                request.setAttribute("exception", isValidToken);
                 filterChain.doFilter(request, response);
                 return;
             };
