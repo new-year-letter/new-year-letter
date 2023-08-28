@@ -59,20 +59,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try {
             accessToken = authorizationHeader.split(" ")[1];
             log.info("accessToken:{}",accessToken);
-            //access token 유효성 검사
+            //access token 유효성 검사, 만료시간 검사
             if (!JwtTokenUtil.isValid(accessToken, secretKey).equals("OK")) {
                 log.info("Exception Expired Token");
-                request.setAttribute("exception", ErrorCode.INVALID_TOKEN.name());
-//                request.setAttribute("exception", isValidToken);
+                request.setAttribute("exception", ErrorCode.EXPIRE_TOKEN.name());
                 filterChain.doFilter(request, response);
                 return;
             };
 
             // Token에서 UserSeq꺼내기 (JwtTokenUtil에서 Claim에서 꺼냄)
             Long userSeq = JwtTokenUtil.getUserSeq(accessToken, secretKey);
-//            log.info("userSeq:{}", userSeq);
-//            String userName = JwtTokenUtil.getUserName(accessToken, secretKey);
-//            log.info("userName:{}", userName);
             User user = userService.getUserByUserSeq(userSeq);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserID(), null

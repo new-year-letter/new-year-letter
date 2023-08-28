@@ -85,9 +85,18 @@ public class AuthService {
     return new AuthLogoutResponse("success logout");
     }
 
-
+    /**
+     * 재발급 로직
+     * @param request RefreshToken
+     * @return AccessToken
+     */
     public AuthReissueResponse reissue(AuthReissueRequest request) {
         String requestRefreshToken = request.getRefreshToken();
+        String requestAccessToken = request.getAccessToken();
+        //accessToken이 유효한 token이면 blackList처리
+//        if( JwtTokenUtil.isValid(requestAccessToken, key).equals("OK")){
+//        }
+
         //refresh token 유효성 검사
         if(requestRefreshToken == null){
             throw new AppException(ErrorCode.INVALID_TOKEN, ErrorCode.INVALID_TOKEN.getMessage());

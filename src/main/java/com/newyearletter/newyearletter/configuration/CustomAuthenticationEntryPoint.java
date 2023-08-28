@@ -29,6 +29,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         }
         else if(exception.equals(ErrorCode.INVALID_PERMISSION.name())) {
             setResponse(response, ErrorCode.INVALID_PERMISSION);
+        }else if(exception.equals(ErrorCode.EXPIRE_TOKEN.name())){
+            setResponse(response, ErrorCode.EXPIRE_TOKEN);
         }
 
     }

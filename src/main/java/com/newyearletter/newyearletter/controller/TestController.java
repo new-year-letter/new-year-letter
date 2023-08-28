@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
+    @GetMapping
+    public String Test(){
+        return "TEST";
+    }
 
     @PostMapping("/token")
     public String Test(Authentication authentication){

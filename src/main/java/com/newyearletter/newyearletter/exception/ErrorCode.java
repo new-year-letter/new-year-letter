@@ -19,7 +19,7 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "잘못된 토큰입니다."),
     INVALID_PERMISSION(HttpStatus.UNAUTHORIZED, "사용자가 권한이 없습니다."),
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "DB에러"),
-    EXPIRE_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 Token입니다")
+    EXPIRE_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 Token입니다"),
     ;
 
     private HttpStatus status;
