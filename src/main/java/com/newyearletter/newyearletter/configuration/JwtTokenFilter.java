@@ -3,6 +3,7 @@ package com.newyearletter.newyearletter.configuration;
 import com.newyearletter.newyearletter.domain.entity.User;
 import com.newyearletter.newyearletter.exception.AppException;
 import com.newyearletter.newyearletter.exception.ErrorCode;
+import com.newyearletter.newyearletter.repository.RefreshTokenRepository;
 import com.newyearletter.newyearletter.service.UserService;
 import com.newyearletter.newyearletter.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         final String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("authorizationHeader:{}",authorizationHeader);
+//        log.info("authorizationHeader:{}",authorizationHeader);
 
         //토큰이 없는 경우
         if(authorizationHeader == null) {
@@ -53,21 +54,22 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         }
 
         //bearer 이후 문자열 token 분리 성공 실패
-        String token;
+        String accessToken;
 
         try {
-            token = authorizationHeader.split(" ")[1];
-
-            //만료된 토큰일 경우
-            if(JwtTokenUtil.isExpired(token, secretKey)) {
-                request.setAttribute("exception", ErrorCode.INVALID_TOKEN.name());
+            accessToken = authorizationHeader.split(" ")[1];
+            log.info("accessToken:{}",accessToken);
+            //access token 유효성 검사, 만료시간 검사
+            if (!JwtTokenUtil.isValid(accessToken, secretKey).equals("OK")) {
+                log.info("Exception Expired Token");
+                request.setAttribute("exception", ErrorCode.EXPIRE_TOKEN.name());
                 filterChain.doFilter(request, response);
                 return;
             };
 
-            // Token에서 UserName꺼내기 (JwtTokenUtil에서 Claim에서 꺼냄)
-            String userName = JwtTokenUtil.getUserName(token, secretKey);
-            User user = userService.getUserByUserID(userName);
+            // Token에서 UserSeq꺼내기 (JwtTokenUtil에서 Claim에서 꺼냄)
+            Long userSeq = JwtTokenUtil.getUserSeq(accessToken, secretKey);
+            User user = userService.getUserByUserSeq(userSeq);
 
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUserID(), null
                     , List.of(new SimpleGrantedAuthority("USER")));
@@ -77,6 +79,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 
         } catch (Exception e) {
+            log.info(e.getMessage());
             request.setAttribute("exception", ErrorCode.INVALID_TOKEN.name());
             filterChain.doFilter(request, response);
         }
